@@ -32,18 +32,32 @@ namespace PacsParser
 
         public void findAllUsers()
         {
+            FindSCU mySearch = new FindSCU();
             // define query map
-            var searchMap = new Dictionary<int, string>();
-            searchMap.Add(dicomTagNumber("QueryRetrieveLevel"), "PATIENT");
-            searchMap.Add(dicomTagNumber("patientName"), "");
-            searchMap.Add(dicomTagNumber("patientID"), "");
-            // write query map into DCXOBJ
-            DCXOBJ query = encodeQuery(searchMap, "find");
+            mySearch.addToMap("QueryRetrieveLevel", "PATIENT");
+            mySearch.addToMap("patientName", "");
+            mySearch.addToMap("patientID", "");
+
             // use it to query and print results according to input query map
-            FindSCU mySearch = new FindSCU(searchMap);
-            if (mySearch.tryQueryServer(serverino, query))
+            if (mySearch.tryQueryServer(serverino, mySearch.getSearchMap()))
                 if (mySearch.tryReadResults())
                     mySearch.printResults();
+            logOutput("------------------------------------------------------------------");
+        }
+
+        public void findStudy()
+        {
+            FindSCU mySearch = new FindSCU();
+            // define query map
+            mySearch.addToMap("QueryRetrieveLevel", "STUDY");
+            mySearch.addToMap("studyInstanceUID", "");
+            mySearch.addToMap("patientName", "Doe^Pierre");
+
+            // use it to query and print results according to input query map
+            if (mySearch.tryQueryServer(serverino, mySearch.getSearchMap()))
+                if (mySearch.tryReadResults())
+                    mySearch.printResults();
+            logOutput("------------------------------------------------------------------");
         }
 
         public void downloadStudy (string studyInstanceUID)
@@ -51,7 +65,8 @@ namespace PacsParser
             var map = new Dictionary<int, string>();
             map.Add(dicomTagNumber("QueryRetrieveLevel"), "STUDY");
             map.Add(dicomTagNumber("studyInstanceUID"), studyInstanceUID);
-            DCXOBJ moveQuery = encodeQuery(map, "retrieve");
+            leggiCampiQuery(map, "retrieve");
+            DCXOBJ moveQuery = encodeQuery(map);
             listenAndMove(moveQuery);
         }
 

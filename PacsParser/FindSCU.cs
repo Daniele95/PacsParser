@@ -11,15 +11,22 @@ namespace PacsParser
         Dictionary<int, string> searchMap;
         private DCXOBJIterator queryResults;
 
-        public FindSCU(Dictionary<int, string> searchMap)
+        public FindSCU()
         {
-            this.searchMap = searchMap;
+            searchMap = new Dictionary<int, string>();
             queryResults = new DCXOBJIterator();
             Thread.Sleep(1000);
         }
 
-        public bool tryQueryServer(Association serverino, DCXOBJ obj)
+
+        public bool tryQueryServer(Association serverino, Dictionary<int, string> searchMap)
         {
+            this.searchMap = searchMap;
+            leggiCampiQuery(searchMap, "find");
+
+            // write query map into DCXOBJ
+            DCXOBJ query = encodeQuery(searchMap);
+
             bool ret = false;
             DCXREQ req = new DCXREQ();
             req.AssociationRequestTimeout = 1;
@@ -32,7 +39,7 @@ namespace PacsParser
                                      serverino.TargetIp,
                                      serverino.TargetPort,
                                      "1.2.840.10008.5.1.4.1.2.1.1",
-                                     obj);
+                                     query);
                 ret = true;
             }
             catch (System.Runtime.InteropServices.COMException exc)
@@ -65,11 +72,24 @@ namespace PacsParser
             try
             {
                 string results = displayQuerySingleResult(queryResult, searchMap);
-                logOutput("Arrivato il file: " + results);
+                logOutput("Ottenuto un risultato");
+                //logOutput(results);
             }
 
             catch (System.Runtime.InteropServices.COMException exc)
             { errorMessage("La ricerca non ha prodotto risultati."); }
+        }
+
+
+        public void addToMap(string dicomTagName, string value)
+        {
+            int _dicomTagNumber = dicomTagNumber(dicomTagName);
+            if (_dicomTagNumber != 0) searchMap.Add(_dicomTagNumber, value);
+        }
+
+        public Dictionary<int, string> getSearchMap()
+        {
+            return searchMap;
         }
 
     }

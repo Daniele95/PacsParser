@@ -7,14 +7,11 @@ namespace PacsParser
 {
     public class Utilities
     {
-        public static DCXOBJ encodeQuery(Dictionary<int, string> searchMap, string type)
+        // the following is utility because shared by both find and move
+        public static DCXOBJ encodeQuery(Dictionary<int, string> searchMap)
         {
             DCXOBJ obj = new DCXOBJ();
             DCXELM el = new DCXELM();
-
-            string specifiedFields = "";
-            string queryFor = "";
-            // ad es "Query for: patientName, patientID"
 
             foreach (var pair in searchMap)
             {
@@ -22,17 +19,33 @@ namespace PacsParser
                 if (pair.Value != "")
                 {
                     el.Value = pair.Value; // ad esempio "STUDY"
-                    specifiedFields += dicomTagName(pair.Key) + "   " + pair.Value +"/n";
+                }
+                obj.insertElement(el);
+            }
+            return obj;
+        }
+
+        public static string[] leggiCampiQuery(Dictionary<int, string> searchMap, string type)
+        {
+            string specifiedFields = "";
+            string queryFor = "";
+            // ad es "Query for: patientName, patientID"
+
+            foreach (var pair in searchMap)
+            {
+                if (pair.Value != "")
+                {
+                    // pair.Key ad esempio (int)QueryRetrieveLevel
+                    // pair.Value ad esempio "STUDY"
+                    specifiedFields += dicomTagName(pair.Key) + "   " + pair.Value + "/n";
                 }
                 else
                     queryFor += dicomTagName(pair.Key) + ", ";
-                obj.insertElement(el);
             }
-
-            if (type=="find") logOutput("Query for:/n" + cutLastChar(queryFor,2));
-            if (type == "retrieve") logOutput("Retrieving:/n" + cutLastChar(specifiedFields,2));
-
-            return obj;
+            logOutput("Retrieving:/n" + cutLastChar(specifiedFields, 2));
+            if (type=="find") logOutput("Query for:/n" + cutLastChar(queryFor, 2));
+            string[] campiQuery = { specifiedFields, queryFor };
+            return campiQuery;
         }
 
         public static string displayQuerySingleResult(DCXOBJ currObj, Dictionary<int, string> searchMap)
@@ -46,6 +59,23 @@ namespace PacsParser
             results += cutLastChar(message,3);
             results = results.Replace("/n", System.Environment.NewLine);
             return results;
+        }
+
+        public static String stampa(DCXOBJ currObj, int dicomTagNumber)
+        {
+            string ret = "";
+            DCXELM currElem = new DCXELM();
+            try
+            {
+                currElem = currObj.getElementByTag(dicomTagNumber);
+                ret = dicomTagName(dicomTagNumber) + ": " + currElem.Value + " | ";
+            }
+            catch (Exception e)
+            {
+                errorMessage("Nel risultato della query non è contenuto il tag DICOM '"
+                + dicomTagName(dicomTagNumber) + "'");
+            }
+            return ret;
         }
 
         public static void logOutput(string s)
@@ -80,7 +110,7 @@ namespace PacsParser
                 myEnum = (DICOM_TAGS_ENUM)dicomTagNumber;
                 ret = myEnum.ToString();
             }
-            catch(Exception e) { logOutput("Al numero " + dicomTagNumber + " non corrisponde alcun tag DICOM"); }   
+            catch(Exception e) { errorMessage("Al numero " + dicomTagNumber + " non corrisponde alcun tag DICOM"); }
             return ret;
         }
 
@@ -92,17 +122,7 @@ namespace PacsParser
                 myEnum = (DICOM_TAGS_ENUM)System.Enum.Parse(typeof(DICOM_TAGS_ENUM), dicomTagName);
                 ret = (int)myEnum;
             }
-            catch(Exception e) { logOutput("Il tag DICOM " + dicomTagName + " non esiste"); }
-            
-            return ret;
-        }
-
-        public static String stampa(DCXOBJ currObj, int dicomTagNumber)
-        {
-            DCXELM currElem = new DCXELM();
-            currElem = currObj.getElementByTag(dicomTagNumber);
-            // può lanciare Tag Not Found exception?
-            string ret = dicomTagName(dicomTagNumber) + ": " + currElem.Value + " | ";
+            catch(Exception e) { errorMessage("'" + dicomTagName + "' non è un tag DICOM"); }
             return ret;
         }
 
