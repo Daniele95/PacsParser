@@ -1,0 +1,17 @@
+C:\Users\daniele\Documents\Visual Studio 2017\Projects\PacsParser\PacsParser\obj\x64\Debug\Interop.rzdcxLib.dll
+C:\Users\daniele\Documents\Visual Studio 2017\Projects\PacsParser\PacsParser\obj\x64\Debug\PacsParser.csproj.ResolveComReference.cache
+C:\Users\daniele\Documents\Visual Studio 2017\Projects\PacsParser\PacsParser\obj\x64\Debug\PacsParser.csprojAssemblyReference.cache
+C:\Users\daniele\Documents\Visual Studio 2017\Projects\PacsParser\PacsParser\obj\x64\Debug\PacsParser_MarkupCompile.cache
+C:\Users\daniele\Documents\Visual Studio 2017\Projects\PacsParser\PacsParser\obj\x64\Debug\App.baml
+C:\Users\daniele\Documents\Visual Studio 2017\Projects\PacsParser\PacsParser\obj\x64\Debug\PacsParser.g.resources
+C:\Users\daniele\Documents\Visual Studio 2017\Projects\PacsParser\PacsParser\obj\x64\Debug\PacsParser.Properties.Resources.resources
+C:\Users\daniele\Documents\Visual Studio 2017\Projects\PacsParser\PacsParser\obj\x64\Debug\PacsParser.csproj.GenerateResource.cache
+C:\Users\daniele\Documents\Visual Studio 2017\Projects\PacsParser\PacsParser\obj\x64\Debug\PacsParser.csproj.CoreCompileInputs.cache
+C:\Users\daniele\Documents\Visual Studio 2017\Projects\PacsParser\PacsParser\bin\x64\Debug\PacsParser.exe.config
+C:\Users\daniele\Documents\Visual Studio 2017\Projects\PacsParser\PacsParser\bin\x64\Debug\PacsParser.exe
+C:\Users\daniele\Documents\Visual Studio 2017\Projects\PacsParser\PacsParser\bin\x64\Debug\PacsParser.pdb
+C:\Users\daniele\Documents\Visual Studio 2017\Projects\PacsParser\PacsParser\bin\x64\Debug\Dicom.Core.dll
+C:\Users\daniele\Documents\Visual Studio 2017\Projects\PacsParser\PacsParser\bin\x64\Debug\Dicom.Native64.dll
+C:\Users\daniele\Documents\Visual Studio 2017\Projects\PacsParser\PacsParser\obj\x64\Debug\PacsParser.csproj.CopyComplete
+C:\Users\daniele\Documents\Visual Studio 2017\Projects\PacsParser\PacsParser\obj\x64\Debug\PacsParser.exe
+C:\Users\daniele\Documents\Visual Studio 2017\Projects\PacsParser\PacsParser\obj\x64\Debug\PacsParser.pdb
