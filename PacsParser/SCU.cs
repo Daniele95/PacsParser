@@ -6,8 +6,8 @@ namespace PacsParser
 {
     abstract class SCU
     {
-        DCXREQ req = new DCXREQ() { AssociationRequestTimeout = 1 };
-        Dictionary<int, string> searchMap;
+        public DCXREQ req = new DCXREQ() { AssociationRequestTimeout = 1 };
+        public Dictionary<int, string> searchMap;
 
         public SCU()
         {
@@ -40,6 +40,9 @@ namespace PacsParser
             return ret;
         }
 
+        public abstract bool tryReadResults();
+
+        public abstract void printResults();
 
         public static DCXOBJ encodeQuery(Dictionary<int, string> searchMap)
         {

@@ -17,17 +17,17 @@ namespace PacsParser
 
     class QuerySettings
     {
-        Association serverino;
+        Association association;
 
         public QuerySettings()
         {
             // create server association
-            serverino = new Association();
-            serverino.TargetIp = "localhost";
-            serverino.TargetPort = 11112;
-            serverino.TargetAET = "MIOSERVER";
-            serverino.myAET = "USER";
-            serverino.myPort = 11115;
+            association = new Association();
+            association.TargetIp = "localhost";
+            association.TargetPort = 11112;
+            association.TargetAET = "MIOSERVER";
+            association.myAET = "USER";
+            association.myPort = 11115;
         }
 
         public void findAllUsers()
@@ -39,7 +39,7 @@ namespace PacsParser
             mySearch.addToMap("patientID", "");
 
             // use it to query and print results according to input query map
-            if (mySearch.tryQueryServer(serverino, mySearch.getSearchMap(), "find"))
+            if (mySearch.tryQueryServer(association, "find"))
                 if (mySearch.tryReadResults())
                     mySearch.printResults();
             logOutput("------------------------------------------------------------------");
@@ -54,7 +54,7 @@ namespace PacsParser
             mySearch.addToMap("patientName", "Doe^Pierre");
 
             // use it to query and print results according to input query map
-            if (mySearch.tryQueryServer(serverino, "find"))
+            if (mySearch.tryQueryServer(association, "find"))
                 if (mySearch.tryReadResults())
                     mySearch.printResults();
             logOutput("------------------------------------------------------------------");
@@ -63,24 +63,12 @@ namespace PacsParser
         public void downloadStudy (string studyInstanceUID)
         {
             MoveSCU myMove = new MoveSCU();
+            myMove.startListening(association);
             myMove.addToMap("QueryRetrieveLevel", "STUDY");
             myMove.addToMap("studyInstanceUID", studyInstanceUID);
 
-            // qui accendo il listener
-            Thread listener = new Thread(() =>
-            {
-                StoreSCP asd = new StoreSCP(this.serverino);
-            });
-            Thread main = new Thread(() =>
-            {
-                myMove.tryQueryServer(serverino, "retrieve");
-                Thread.Sleep(1000);
-            });
-            listener.Start();
-            Thread.Sleep(1000);
-            main.Start();
-
-            listener.Join();
+            if (myMove.tryQueryServer(association, "retrieve"))
+                logOutput("inviata richiesta di associazione e invio file");
 
         }
 

@@ -26,7 +26,7 @@ namespace PacsParser
                                     query);
         }
 
-        public bool tryReadResults()
+        public override bool tryReadResults()
         {
             bool ret = false;
             try { queryResults.Get(); ret = true; }
@@ -34,7 +34,7 @@ namespace PacsParser
             return ret;
         }
 
-        public void printResults()
+        public override void printResults()
         {
             DCXOBJ querySingleResult = new DCXOBJ();
             logOutput("Tutti i risultati:");
@@ -48,7 +48,7 @@ namespace PacsParser
 
         public override void setCallbackDelegate(DCXREQ req)
         {
-            req.OnQueryResponseRecieved += new IDCXREQEvents_OnQueryResponseRecievedEventHandler(risposta2);
+            req.OnQueryResponseRecieved += new IDCXREQEvents_OnQueryResponseRecievedEventHandler(OnQueryResponseRecieved);
         }
 
         void OnQueryResponseRecieved(DCXOBJ queryResult)

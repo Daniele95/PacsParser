@@ -9,14 +9,15 @@ namespace PacsParser
     class StoreSCP
     {
         static private int _filecount = 0;
-
-        public StoreSCP(Association ass)
+        DCXAPP app;
+        DCXACC acc;
+        public StoreSCP()
         {
-            DCXAPP app = new DCXAPP();
+            app = new DCXAPP();
             app.StartLogging("C:/Users/daniele/Desktop/dicomLog.txt");
 
             // creo l'accettore
-            DCXACC acc = new DCXACC();
+            acc = new DCXACC();
 
             // connetto gli eventi alle callback
             acc.OnConnection += new IDCXACCEvents_OnConnectionEventHandler(OnConnectionEventHandler);
@@ -25,7 +26,11 @@ namespace PacsParser
             acc.OnStoreDone += new IDCXACCEvents_OnStoreDoneEventHandler(OnStoreDoneEventHandler);
             acc.OnCommitResult += new IDCXACCEvents_OnCommitResultEventHandler(OnCommitResultEventHandler);
 
-            
+        }
+        
+        public void startListening(Association ass)
+        {
+
             Console.WriteLine("StoreSCP listening...");
             if (acc.WaitForConnection(ass.myAET, ass.myPort, 2))
             {
@@ -48,7 +53,7 @@ namespace PacsParser
             app.StopLogging();
             ReleaseComObject(app);
         }
-        
+
         // evento: ricevuta richiesta associazione
         private void OnConnectionEventHandler(string callingTitle, string calledTitle,
                                        string callingHost, ref bool acceptConnection)
