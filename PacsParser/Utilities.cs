@@ -7,47 +7,6 @@ namespace PacsParser
 {
     public class Utilities
     {
-        // the following is utility because shared by both find and move
-        public static DCXOBJ encodeQuery(Dictionary<int, string> searchMap)
-        {
-            DCXOBJ obj = new DCXOBJ();
-            DCXELM el = new DCXELM();
-
-            foreach (var pair in searchMap)
-            {
-                el.Init(pair.Key); // ad esempio (int)QueryRetrieveLevel
-                if (pair.Value != "")
-                {
-                    el.Value = pair.Value; // ad esempio "STUDY"
-                }
-                obj.insertElement(el);
-            }
-            return obj;
-        }
-
-        public static string[] leggiCampiQuery(Dictionary<int, string> searchMap, string type)
-        {
-            string specifiedFields = "";
-            string queryFor = "";
-            // ad es "Query for: patientName, patientID"
-
-            foreach (var pair in searchMap)
-            {
-                if (pair.Value != "")
-                {
-                    // pair.Key ad esempio (int)QueryRetrieveLevel
-                    // pair.Value ad esempio "STUDY"
-                    specifiedFields += dicomTagName(pair.Key) + "   " + pair.Value + "/n";
-                }
-                else
-                    queryFor += dicomTagName(pair.Key) + ", ";
-            }
-            logOutput("Retrieving:/n" + cutLastChar(specifiedFields, 2));
-            if (type=="find") logOutput("Query for:/n" + cutLastChar(queryFor, 2));
-            string[] campiQuery = { specifiedFields, queryFor };
-            return campiQuery;
-        }
-
         public static string displayQuerySingleResult(DCXOBJ currObj, Dictionary<int, string> searchMap)
         {
             string results = "";

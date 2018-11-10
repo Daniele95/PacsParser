@@ -39,7 +39,7 @@ namespace PacsParser
             mySearch.addToMap("patientID", "");
 
             // use it to query and print results according to input query map
-            if (mySearch.tryQueryServer(serverino, mySearch.getSearchMap()))
+            if (mySearch.tryQueryServer(serverino, mySearch.getSearchMap(), "find"))
                 if (mySearch.tryReadResults())
                     mySearch.printResults();
             logOutput("------------------------------------------------------------------");
@@ -54,7 +54,7 @@ namespace PacsParser
             mySearch.addToMap("patientName", "Doe^Pierre");
 
             // use it to query and print results according to input query map
-            if (mySearch.tryQueryServer(serverino, mySearch.getSearchMap()))
+            if (mySearch.tryQueryServer(serverino, "find"))
                 if (mySearch.tryReadResults())
                     mySearch.printResults();
             logOutput("------------------------------------------------------------------");
@@ -62,25 +62,18 @@ namespace PacsParser
 
         public void downloadStudy (string studyInstanceUID)
         {
-            var map = new Dictionary<int, string>();
-            map.Add(dicomTagNumber("QueryRetrieveLevel"), "STUDY");
-            map.Add(dicomTagNumber("studyInstanceUID"), studyInstanceUID);
-            leggiCampiQuery(map, "retrieve");
-            DCXOBJ moveQuery = encodeQuery(map);
-            listenAndMove(moveQuery);
-        }
+            MoveSCU myMove = new MoveSCU();
+            myMove.addToMap("QueryRetrieveLevel", "STUDY");
+            myMove.addToMap("studyInstanceUID", studyInstanceUID);
 
-        void listenAndMove(DCXOBJ moveQuery)
-        {
-
+            // qui accendo il listener
             Thread listener = new Thread(() =>
             {
                 StoreSCP asd = new StoreSCP(this.serverino);
             });
             Thread main = new Thread(() =>
             {
-                MoveSCU mv = new MoveSCU(this.serverino);
-                mv.issueMoveCommand(moveQuery);
+                myMove.tryQueryServer(serverino, "retrieve");
                 Thread.Sleep(1000);
             });
             listener.Start();
@@ -88,6 +81,7 @@ namespace PacsParser
             main.Start();
 
             listener.Join();
+
         }
 
     }

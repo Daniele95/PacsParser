@@ -6,45 +6,24 @@ using static PacsParser.Utilities;
 
 namespace PacsParser
 {
-    class FindSCU
+    class FindSCU : SCU
     {
-        Dictionary<int, string> searchMap;
         private DCXOBJIterator queryResults;
 
-        public FindSCU()
+        public FindSCU() : base()
         {
-            searchMap = new Dictionary<int, string>();
             queryResults = new DCXOBJIterator();
             Thread.Sleep(1000);
         }
 
-
-        public bool tryQueryServer(Association serverino, Dictionary<int, string> searchMap)
+        public override void serverConnection(DCXREQ req, Association serverino, DCXOBJ query)
         {
-            this.searchMap = searchMap;
-            leggiCampiQuery(searchMap, "find");
-
-            // write query map into DCXOBJ
-            DCXOBJ query = encodeQuery(searchMap);
-
-            bool ret = false;
-            DCXREQ req = new DCXREQ();
-            req.AssociationRequestTimeout = 1;
-            req.OnQueryResponseRecieved += new IDCXREQEvents_OnQueryResponseRecievedEventHandler(OnQueryResponseRecieved);
-            logOutput("Launch query:");
-            try
-            {
-                queryResults = req.Query(serverino.myAET,
-                                     serverino.TargetAET,
-                                     serverino.TargetIp,
-                                     serverino.TargetPort,
-                                     "1.2.840.10008.5.1.4.1.2.1.1",
-                                     query);
-                ret = true;
-            }
-            catch (System.Runtime.InteropServices.COMException exc)
-            { errorMessage("Impossibile connettersi al server"); }
-            return ret;
+            queryResults = req.Query(serverino.myAET,
+                                    serverino.TargetAET,
+                                    serverino.TargetIp,
+                                    serverino.TargetPort,
+                                    "1.2.840.10008.5.1.4.1.2.1.1",
+                                    query);
         }
 
         public bool tryReadResults()
@@ -67,6 +46,11 @@ namespace PacsParser
             }
         }
 
+        public override void setCallbackDelegate(DCXREQ req)
+        {
+            req.OnQueryResponseRecieved += new IDCXREQEvents_OnQueryResponseRecievedEventHandler(risposta2);
+        }
+
         void OnQueryResponseRecieved(DCXOBJ queryResult)
         {
             try
@@ -78,18 +62,6 @@ namespace PacsParser
 
             catch (System.Runtime.InteropServices.COMException exc)
             { errorMessage("La ricerca non ha prodotto risultati."); }
-        }
-
-
-        public void addToMap(string dicomTagName, string value)
-        {
-            int _dicomTagNumber = dicomTagNumber(dicomTagName);
-            if (_dicomTagNumber != 0) searchMap.Add(_dicomTagNumber, value);
-        }
-
-        public Dictionary<int, string> getSearchMap()
-        {
-            return searchMap;
         }
 
     }

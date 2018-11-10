@@ -1,49 +1,48 @@
 ﻿using rzdcxLib;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using static PacsParser.Utilities;
 
 namespace PacsParser
 {
-    class MoveSCU
+    class MoveSCU : SCU
     {
-        Association ass;
-
-        public MoveSCU(Association ass )
+        DCXACC accepter = new DCXACC();
+    
+        public MoveSCU() : base()
         {
-            this.ass = ass;
-        }
-
-        public void issueMoveCommand(DCXOBJ moveQuery)
-        {
-            DCXREQ requester = new DCXREQ();
-            requester.OnMoveResponseRecievedEx += new IDCXREQEvents_OnMoveResponseRecievedExEventHandler(req_OnMoveResponseRecievedEx);
-
-            // Create an accepter to handle the incomming association
-            DCXACC accepter = new DCXACC();
             accepter.StoreDirectory = "C:/Users/daniele/Desktop/moveAndStore";
             Directory.CreateDirectory(accepter.StoreDirectory);
+        }
 
-            // Create a requester and run the query
-            requester.MoveAndStore(
-                ass.myAET,          // The AE title that issue the C-MOVE
-                ass.TargetAET,      // The PACS AE title
-                ass.TargetIp,       // The PACS IP address
-                ass.TargetPort,     // The PACS listener port
-                ass.myAET,          // The AE title to send the
+        public override void serverConnection(DCXREQ req, Association serverino, DCXOBJ moveQuery)
+        {
+            req.MoveAndStore(
+                serverino.myAET,          // The AE title that issue the C-MOVE
+                serverino.TargetAET,      // The PACS AE title
+                serverino.TargetIp,       // The PACS IP address
+                serverino.TargetPort,     // The PACS listener port
+                serverino.myAET,          // The AE title to send the
                 moveQuery,              // The matching criteria
-                ass.myPort,         // The port to receive the results
+                serverino.myPort,         // The port to receive the results
                 accepter);          // The accepter to handle the results
         }
 
-        void req_OnMoveResponseRecievedEx(
+        public override void setCallbackDelegate( DCXREQ req)
+        {
+            req.OnMoveResponseRecievedEx += new IDCXREQEvents_OnMoveResponseRecievedExEventHandler(risposta);
+        }
+
+        void OnMoveResponseRecievedEx(
            ushort status,
            ushort remaining,
            ushort completed,
            ushort failed,
            ushort warning)
         {
-            Console.Write("pronto a muovere");
+            logOutput("eccezione");
         }
-        
+
     }
 }
