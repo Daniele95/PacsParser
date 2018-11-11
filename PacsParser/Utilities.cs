@@ -39,7 +39,7 @@ namespace PacsParser
                 myEnum = (DICOM_TAGS_ENUM)dicomTagNumber;
                 ret = myEnum.ToString();
             }
-            catch(Exception e) { errorMessage("Al numero " + dicomTagNumber + " non corrisponde alcun tag DICOM"); }
+            catch(Exception) { errorMessage("Al numero " + dicomTagNumber + " non corrisponde alcun tag DICOM"); }
             return ret;
         }
 
@@ -51,7 +51,7 @@ namespace PacsParser
                 myEnum = (DICOM_TAGS_ENUM)System.Enum.Parse(typeof(DICOM_TAGS_ENUM), dicomTagName);
                 ret = (int)myEnum;
             }
-            catch(Exception e) { errorMessage("'" + dicomTagName + "' non è un tag DICOM"); }
+            catch(Exception) { errorMessage("'" + dicomTagName + "' non è un tag DICOM"); }
             return ret;
         }
 

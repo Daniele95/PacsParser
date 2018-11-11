@@ -26,11 +26,13 @@ namespace PacsParser
                                     query);
         }
 
+        // todo after server answered
+
         public bool tryReadResults()
         {
             bool ret = false;
             try { queryResults.Get(); ret = true; }
-            catch (Exception e) { errorMessage("Query effettuata, ma il risultato della query è vuoto"); }
+            catch (Exception) { errorMessage("Query effettuata, ma il risultato della query è vuoto"); }
             return ret;
         }
 
@@ -55,10 +57,12 @@ namespace PacsParser
             List<int> keys = new List<int>(searchMap.Keys);
             foreach (int key in keys) // es. patientName, patientID,..)
             {
+                // store found values into searchMap
+                searchMap[key] = foundValue(currObj, key);
+
+                // print only new found values:
                 if (searchMap[key] == "") // es. patientID
                 {
-                    // print found values and store them into searchMap
-                    searchMap[key] = foundValue(currObj, key);
                     message += dicomTagName(key) + ": " + foundValue(currObj, key) + " | ";
                 }
             }
@@ -76,13 +80,17 @@ namespace PacsParser
                 currElem = currObj.getElementByTag(dicomTagNumber);
                 ret = currElem.Value;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 errorMessage("Nel risultato della query non è contenuto il tag DICOM '"
                 + dicomTagName(dicomTagNumber) + "'");
             }
             return ret;
         }
+
+        //
+
+
 
         public override void setCallbackDelegate(DCXREQ req)
         {
@@ -98,7 +106,7 @@ namespace PacsParser
                 //logOutput(results);
             }
 
-            catch (System.Runtime.InteropServices.COMException exc)
+            catch (Exception)
             { errorMessage("La ricerca non ha prodotto risultati."); }
         }
 

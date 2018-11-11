@@ -34,13 +34,13 @@ namespace PacsParser
                 serverConnection(req,serverino,query);
                 ret = true;
             }
-            catch (System.Runtime.InteropServices.COMException exc)
+            catch (System.Runtime.InteropServices.COMException)
             { errorMessage("Impossibile connettersi al server"); }
 
             return ret;
         }
 
-
+        // to do before calling server        
         public static DCXOBJ encodeQuery(Dictionary<int, string> searchMap)
         {
             DCXOBJ obj = new DCXOBJ();
@@ -57,7 +57,6 @@ namespace PacsParser
             }
             return obj;
         }
-
         public static string[] leggiCampiQuery(Dictionary<int, string> searchMap, string type)
         {
             string specifiedFields = "";
@@ -86,7 +85,7 @@ namespace PacsParser
             string[] campiQuery = { specifiedFields, queryFor };
             return campiQuery;
         }
-
+        //
 
         // getter and setter
 

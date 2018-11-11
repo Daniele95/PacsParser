@@ -27,6 +27,22 @@ namespace PacsParser
             association.myPort = 11115;
         }
 
+
+        public string findFullName(string partialName)
+        {
+            FindSCU mySearch = new FindSCU();
+            // define query map
+            mySearch.addToMap("QueryRetrieveLevel", "PATIENT");
+            mySearch.addToMap("patientName", partialName);
+
+            if (mySearch.tryQueryServer(association, "find"))
+                if (mySearch.tryReadResults())
+                    mySearch.printResults();
+            logOutput("------------------------------------------------------------------");
+
+            return mySearch.readFromMap("patientName");
+        }
+
         public string findPatientID(string patientName)
         {
             FindSCU mySearch = new FindSCU();
