@@ -20,6 +20,7 @@ namespace PacsParser
             });
             thread.SetApartmentState(ApartmentState.STA);
             thread.Start();
+            
 
             //query.downloadStudy(query.findStudyOfUser(query.findPatientID("Doe^Pierre")));
 

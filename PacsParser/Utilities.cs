@@ -1,9 +1,42 @@
 ﻿using rzdcxLib;
 using System;
+using System.Collections.Generic;
 using System.Windows;
 
 namespace PacsParser
 {
+
+    // object with the event
+    public class Publisher
+    {
+        // declare event handler
+        public delegate void EventHandler(Object sender, RaiseArgs e);
+        // declare event
+        public static event EventHandler Event;
+        // raise event, result: "hello"
+        public void RaiseEvent(int a)
+        {
+            RaiseArgs args = new RaiseArgs();
+            args.Message = a.ToString();
+            Event(this, args);
+        }
+    }
+
+    // object that listens for the event
+    public interface Listener
+    {
+        // subscribe to event
+         void Subscribe(Publisher publisher);
+            
+
+    }
+
+    // the arguments to use with an event
+    public class RaiseArgs : EventArgs
+    {
+        public string Message { get; set; }
+    }
+
     public class Utilities
     {
 
@@ -54,6 +87,18 @@ namespace PacsParser
             catch(Exception) { errorMessage("'" + dicomTagName + "' non è un tag DICOM"); }
             return ret;
         }
+
+        public static string toString(List<string> lista)
+        {
+            string sumOfResults = "";
+            foreach (string result in lista)
+            {
+                sumOfResults += result + "\n";
+            }
+            return breakLines(sumOfResults);
+        }
+
+
 
     }
 }

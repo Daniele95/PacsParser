@@ -9,10 +9,16 @@ namespace PacsParser
     class FindSCU : SCU
     {
         private DCXOBJIterator queryResults;
+        
+        public Publisher publisher = new Publisher();
+        public int numResults = 0;
+
+        public Dictionary<int, List<string>> returnMap;
 
         public FindSCU() : base()
         {
             queryResults = new DCXOBJIterator();
+            returnMap = new Dictionary<int, List<string>>();
             Thread.Sleep(1000);
         }
 
@@ -26,8 +32,18 @@ namespace PacsParser
                                     query);
         }
 
-        // todo after server answered
+        // also populate return map
+        public new void addToMap(string dicomTagName, string value)
+        {
+            base.addToMap(dicomTagName,value);
+            int _dicomTagNumber = dicomTagNumber(dicomTagName);
+            List<string> returnValues = new List<string>();
+            if (_dicomTagNumber != 0) returnMap.Add(_dicomTagNumber, returnValues);
+        }
 
+        // todo after server answered:
+        /*
+        // if query result object not empty
         public bool tryReadResults()
         {
             bool ret = false;
@@ -35,43 +51,30 @@ namespace PacsParser
             catch (Exception) { errorMessage("Query effettuata, ma il risultato della query è vuoto"); }
             return ret;
         }
-
-        public Dictionary<int, string> printResults()
+            // then save results into map
+        public void saveResults()
         {
             DCXOBJ querySingleResult = new DCXOBJ();
             logOutput("Tutti i risultati:");
             for (; !queryResults.AtEnd(); queryResults.Next())
             {
                 querySingleResult = queryResults.Get();
-                // stampo il risultato e lo salvo nella mappa:
-                string results = displayQuerySingleResult(querySingleResult);
-                logOutput(results);
             }
-            return searchMap;
         }
-
-        public string displayQuerySingleResult(DCXOBJ currObj)
+         */
+         // for each key in the map
+        public void storeSingleResult(DCXOBJ currObj)
         {
-            string results = "";
-            string message = "";
-            List<int> keys = new List<int>(searchMap.Keys);
-            foreach (int key in keys) // es. patientName, patientID,..)
+            foreach (int dicomTagNumber in searchMap.Keys) // es. patientName, patientID,..)
             {
-                // store found values into searchMap
-                searchMap[key] = foundValue(currObj, key);
-
-                // print only new found values:
-                if (searchMap[key] == "") // es. patientID
-                {
-                    message += dicomTagName(key) + ": " + foundValue(currObj, key) + " | ";
-                }
+                // store found values into returnMap
+                List<string> returnValues = returnMap[dicomTagNumber];
+                returnValues.Add(extractValue(currObj, dicomTagNumber));
+                returnMap[dicomTagNumber] = returnValues;
             }
-            results += cutLastChar(message, 3);
-            results = results.Replace("/n", System.Environment.NewLine);
-            return results;
         }
 
-        public static String foundValue(DCXOBJ currObj, int dicomTagNumber)
+        public static String extractValue(DCXOBJ currObj, int dicomTagNumber)
         {
             string ret = "";
             DCXELM currElem = new DCXELM();
@@ -90,20 +93,27 @@ namespace PacsParser
 
         //
 
-
+        public new List<String> readFromMap(string dicomTagName)
+        {
+            int _dicomTagNumber = dicomTagNumber(dicomTagName);
+            return returnMap[_dicomTagNumber];
+        }
 
         public override void setCallbackDelegate(DCXREQ req)
         {
             req.OnQueryResponseRecieved += new IDCXREQEvents_OnQueryResponseRecievedEventHandler(OnQueryResponseRecieved);
         }
 
+
+
         void OnQueryResponseRecieved(DCXOBJ queryResult)
         {
+
+            numResults++;
+            publisher.RaiseEvent(numResults);
             try
             {
-                logOutput("Ottenuto un risultato");
-                //string results = displayQuerySingleResult(queryResult);
-                //logOutput(results);
+                storeSingleResult(queryResult);
             }
 
             catch (Exception)

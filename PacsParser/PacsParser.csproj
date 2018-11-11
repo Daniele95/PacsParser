@@ -78,7 +78,7 @@
     </Compile>
     <Compile Include="MoveSCU.cs" />
     <Compile Include="Main.cs" />
-    <Compile Include="QuerySettings.cs" />
+    <Compile Include="Query.cs" />
     <Compile Include="SCU.cs" />
     <Compile Include="StoreSCP.cs" />
     <Compile Include="Utilities.cs" />

@@ -13,11 +13,14 @@
         <ListBox x:Name="listBox" HorizontalAlignment="Left" 
                  Height="100" Margin="148,239,0,0" VerticalAlignment="Top" 
                  Width="100" SelectionChanged="listBox_SelectionChanged"/>
-        <TextBlock x:Name="results" HorizontalAlignment="Left" 
+        <TextBlock x:Name="resultsBox" HorizontalAlignment="Left" 
                    Margin="360,277,0,0" TextWrapping="Wrap" Text="risultati" 
                    VerticalAlignment="Top"/>
         <TextBox x:Name="campoTesto" HorizontalAlignment="Left" Height="23" 
                  Margin="285,167,0,0" TextWrapping="Wrap" 
                  VerticalAlignment="Top" Width="120" TextChanged="textBox_TextChanged_1"/>
+        <TextBlock x:Name="processBox" HorizontalAlignment="Left" 
+            Margin="469,214,0,0" TextWrapping="Wrap" 
+            VerticalAlignment="Top" Width="93"><Run Text=""/><LineBreak/><Run/></TextBlock>
     </Grid>
 </Window>
