@@ -8,10 +8,11 @@ namespace PacsParser
     class MoveSCU : SCU
     {
         DCXACC accepter = new DCXACC();
-        StoreSCP listener = new StoreSCP();
+        public StoreSCP listener { get; }
 
         public MoveSCU() : base()
         {
+            listener = new StoreSCP();
             accepter.StoreDirectory = "C:/Users/daniele/Desktop/moveAndStore";
             Directory.CreateDirectory(accepter.StoreDirectory);
 
@@ -48,7 +49,8 @@ namespace PacsParser
 
         void OnMoveResponseRecievedEx( ushort status, ushort remaining, ushort completed, ushort failed, ushort warning)
         {
-            logOutput("Ricevuta risposta dal Move");
+            logOutput("status " + status+", rimanenti " +remaining+", completati "+
+                completed+", falliti "+failed+", avvertimenti "+warning);
         }
 
     }

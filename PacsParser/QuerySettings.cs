@@ -69,7 +69,8 @@ namespace PacsParser
             myMove.addToMap("studyInstanceUID", studyInstanceUID);
 
             if (myMove.tryQueryServer(association, "retrieve"))
-                logOutput("inviata richiesta di associazione e invio file");
+                if(myMove.listener.errorCount==0)
+                    logOutput("file salvati!");
 
         }
 
