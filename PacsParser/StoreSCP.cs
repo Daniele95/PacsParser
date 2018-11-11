@@ -3,12 +3,15 @@ using System;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using static PacsParser.Utilities;
 
 namespace PacsParser
 {
     class StoreSCP
     {
         static private int _filecount = 0;
+        string storageDirectory = "C:/Users/daniele/Desktop/moveAndStore/";
+
         DCXAPP app;
         DCXACC acc;
         public StoreSCP()
@@ -64,8 +67,8 @@ namespace PacsParser
         // evento: ricevuto comando move
         private void OnStoreSetupEventHandler(ref string filename)
         {
-            filename = "C:/Users/daniele/Desktop/moveAndStore/" + (++_filecount) + ".dcm";
-            Console.WriteLine("Store setup on file: " + filename);
+            filename = storageDirectory + (++_filecount) + ".dcm";
+            logOutput("salvo il file come " + _filecount + ".dcm ...");
         }
 
         // cosa fare in caso finisca il tempo
@@ -77,7 +80,8 @@ namespace PacsParser
         // evento: arrivato il file (lo controllo e rispondo se è ok)
         private void OnStoreDoneEventHandler(string filename, bool status, ref bool accept)
         {
-            Console.WriteLine("Store done, file: " + filename + " status: " + status);
+            if (status) logOutput("file salvato!");
+            else errorMessage("errore nel salvataggio del file!");
 
             string sop_instance_uid = null;
             DCXOBJ o = new DCXOBJ();
@@ -91,14 +95,15 @@ namespace PacsParser
             ReleaseComObject(o);
             if (sop_instance_uid != null)
             {
-                String destinationFilename = "C:/Users/daniele/Desktop/moveAndStore/" + sop_instance_uid + ".dcm";
+                String destinationFilename = "./" + sop_instance_uid + ".dcm";
                 if (!File.Exists(destinationFilename))
                 {
+                    logOutput("rinomino il file " + sop_instance_uid);
                     File.Move(filename, destinationFilename);
                 }
                 else
                 {
-                    Console.WriteLine("file gia esiste");
+                    logOutput("impossibile rinominare, file gia esiste");
                 }
             }
             accept = true;

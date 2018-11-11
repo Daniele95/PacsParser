@@ -75,8 +75,14 @@ namespace PacsParser
                 else
                     queryFor += dicomTagName(pair.Key) + ", ";
             }
-            logOutput("Retrieving:/n" + cutLastChar(specifiedFields, 2));
-            if (type == "find") logOutput("Query for:/n" + cutLastChar(queryFor, 2));
+            if (type == "find")
+            {
+                logOutput("Set parameters:/n" + cutLastChar(specifiedFields, 2) + "/n");
+                logOutput("Query for:/n" + cutLastChar(queryFor, 2) + "/n");
+            }
+            if (type=="retrieve")
+                logOutput("Retrieving:/n" + cutLastChar(specifiedFields, 2)+"/n");
+
             string[] campiQuery = { specifiedFields, queryFor };
             return campiQuery;
         }
