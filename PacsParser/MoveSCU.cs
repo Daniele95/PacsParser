@@ -1,6 +1,4 @@
 ﻿using rzdcxLib;
-using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using static PacsParser.Utilities;
@@ -10,7 +8,6 @@ namespace PacsParser
     class MoveSCU : SCU
     {
         DCXACC accepter = new DCXACC();
-
         StoreSCP listener = new StoreSCP();
 
         public MoveSCU() : base()
@@ -31,9 +28,6 @@ namespace PacsParser
             }).Start();
         }
 
-        public override void printResults(){ }
-        public override bool tryReadResults() { return true; }
-
         public override void serverConnection(DCXREQ req, Association serverino, DCXOBJ moveQuery)
         {
             req.MoveAndStore(
@@ -52,14 +46,9 @@ namespace PacsParser
             req.OnMoveResponseRecievedEx += new IDCXREQEvents_OnMoveResponseRecievedExEventHandler(OnMoveResponseRecievedEx);
         }
 
-        void OnMoveResponseRecievedEx(
-           ushort status,
-           ushort remaining,
-           ushort completed,
-           ushort failed,
-           ushort warning)
+        void OnMoveResponseRecievedEx( ushort status, ushort remaining, ushort completed, ushort failed, ushort warning)
         {
-            logOutput("eccezione");
+            logOutput("Ricevuta risposta dal Move");
         }
 
     }

@@ -1,41 +1,11 @@
 ﻿using rzdcxLib;
 using System;
-using System.Collections.Generic;
 using System.Windows;
 
 namespace PacsParser
 {
     public class Utilities
     {
-        public static string displayQuerySingleResult(DCXOBJ currObj, Dictionary<int, string> searchMap)
-        {
-            string results = "";
-            string message = "";
-            foreach (var pair in searchMap)
-                if (pair.Value == "")
-                    message += stampa(currObj, pair.Key);
-
-            results += cutLastChar(message,3);
-            results = results.Replace("/n", System.Environment.NewLine);
-            return results;
-        }
-
-        public static String stampa(DCXOBJ currObj, int dicomTagNumber)
-        {
-            string ret = "";
-            DCXELM currElem = new DCXELM();
-            try
-            {
-                currElem = currObj.getElementByTag(dicomTagNumber);
-                ret = dicomTagName(dicomTagNumber) + ": " + currElem.Value + " | ";
-            }
-            catch (Exception e)
-            {
-                errorMessage("Nel risultato della query non è contenuto il tag DICOM '"
-                + dicomTagName(dicomTagNumber) + "'");
-            }
-            return ret;
-        }
 
         public static void logOutput(string s)
         {

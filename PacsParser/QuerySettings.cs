@@ -1,7 +1,4 @@
-﻿using rzdcxLib;
-using System;
-using System.Collections.Generic;
-using System.Threading;
+﻿using System;
 using static PacsParser.Utilities;
 
 namespace PacsParser
@@ -30,35 +27,39 @@ namespace PacsParser
             association.myPort = 11115;
         }
 
-        public void findAllUsers()
+        public string findPatientID(string patientName)
         {
             FindSCU mySearch = new FindSCU();
             // define query map
             mySearch.addToMap("QueryRetrieveLevel", "PATIENT");
-            mySearch.addToMap("patientName", "");
+            mySearch.addToMap("patientName", patientName);
             mySearch.addToMap("patientID", "");
 
-            // use it to query and print results according to input query map
             if (mySearch.tryQueryServer(association, "find"))
                 if (mySearch.tryReadResults())
                     mySearch.printResults();
             logOutput("------------------------------------------------------------------");
+
+            return mySearch.readFromMap("patientID");
         }
 
-        public void findStudy()
+        public string findStudyOfUser(string patientID)
         {
             FindSCU mySearch = new FindSCU();
             // define query map
             mySearch.addToMap("QueryRetrieveLevel", "STUDY");
+            mySearch.addToMap("patientID", patientID);
             mySearch.addToMap("studyInstanceUID", "");
-            mySearch.addToMap("patientName", "Doe^Pierre");
 
             // use it to query and print results according to input query map
             if (mySearch.tryQueryServer(association, "find"))
                 if (mySearch.tryReadResults())
                     mySearch.printResults();
             logOutput("------------------------------------------------------------------");
-        }
+
+            // supponendo che il paziente abbia un solo studio:
+            return mySearch.readFromMap("studyInstanceUID");
+        }        
 
         public void downloadStudy (string studyInstanceUID)
         {

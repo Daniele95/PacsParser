@@ -27,7 +27,7 @@ namespace PacsParser
 
             setCallbackDelegate(req);
 
-            logOutput("Launching " + type+" command: ");
+            logOutput("Launching " + type+" command:");
 
             try
             {
@@ -40,9 +40,6 @@ namespace PacsParser
             return ret;
         }
 
-        public abstract bool tryReadResults();
-
-        public abstract void printResults();
 
         public static DCXOBJ encodeQuery(Dictionary<int, string> searchMap)
         {
@@ -85,10 +82,18 @@ namespace PacsParser
         }
 
 
+        // getter and setter
+
         public void addToMap(string dicomTagName, string value)
         {
             int _dicomTagNumber = dicomTagNumber(dicomTagName);
             if (_dicomTagNumber != 0) searchMap.Add(_dicomTagNumber, value);
+        }
+
+        public string readFromMap(string dicomTagName)
+        {
+            int _dicomTagNumber = dicomTagNumber(dicomTagName);
+            return searchMap[_dicomTagNumber];
         }
 
         public Dictionary<int, string> getSearchMap()

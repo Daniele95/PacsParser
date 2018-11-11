@@ -26,7 +26,7 @@ namespace PacsParser
                                     query);
         }
 
-        public override bool tryReadResults()
+        public bool tryReadResults()
         {
             bool ret = false;
             try { queryResults.Get(); ret = true; }
@@ -34,16 +34,54 @@ namespace PacsParser
             return ret;
         }
 
-        public override void printResults()
+        public Dictionary<int, string> printResults()
         {
             DCXOBJ querySingleResult = new DCXOBJ();
             logOutput("Tutti i risultati:");
             for (; !queryResults.AtEnd(); queryResults.Next())
             {
                 querySingleResult = queryResults.Get();
-                string results = displayQuerySingleResult(querySingleResult, searchMap);
+                // stampo il risultato e lo salvo nella mappa:
+                string results = displayQuerySingleResult(querySingleResult);
                 logOutput(results);
             }
+            return searchMap;
+        }
+
+        public string displayQuerySingleResult(DCXOBJ currObj)
+        {
+            string results = "";
+            string message = "";
+            List<int> keys = new List<int>(searchMap.Keys);
+            foreach (int key in keys) // es. patientName, patientID,..)
+            {
+                if (searchMap[key] == "") // es. patientID
+                {
+                    // print found values and store them into searchMap
+                    searchMap[key] = foundValue(currObj, key);
+                    message += dicomTagName(key) + ": " + foundValue(currObj, key) + " | ";
+                }
+            }
+            results += cutLastChar(message, 3);
+            results = results.Replace("/n", System.Environment.NewLine);
+            return results;
+        }
+
+        public static String foundValue(DCXOBJ currObj, int dicomTagNumber)
+        {
+            string ret = "";
+            DCXELM currElem = new DCXELM();
+            try
+            {
+                currElem = currObj.getElementByTag(dicomTagNumber);
+                ret = currElem.Value;
+            }
+            catch (Exception e)
+            {
+                errorMessage("Nel risultato della query non è contenuto il tag DICOM '"
+                + dicomTagName(dicomTagNumber) + "'");
+            }
+            return ret;
         }
 
         public override void setCallbackDelegate(DCXREQ req)
@@ -55,8 +93,8 @@ namespace PacsParser
         {
             try
             {
-                string results = displayQuerySingleResult(queryResult, searchMap);
                 logOutput("Ottenuto un risultato");
+                //string results = displayQuerySingleResult(queryResult);
                 //logOutput(results);
             }
 
