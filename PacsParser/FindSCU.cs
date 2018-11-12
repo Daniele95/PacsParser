@@ -10,7 +10,6 @@ namespace PacsParser
     {
         private DCXOBJIterator queryResults;
         
-        public Publisher publisher = new Publisher();
         public int numResults = 0;
 
         public Dictionary<int, List<string>> returnMap;
@@ -63,15 +62,17 @@ namespace PacsParser
         }
          */
          // for each key in the map
-        public void storeSingleResult(DCXOBJ currObj)
+        public List<string> storeSingleResult(DCXOBJ currObj)
         {
+            List<string> returnValues = new List<string>();
             foreach (int dicomTagNumber in searchMap.Keys) // es. patientName, patientID,..)
             {
                 // store found values into returnMap
-                List<string> returnValues = returnMap[dicomTagNumber];
+                returnValues = returnMap[dicomTagNumber];
                 returnValues.Add(extractValue(currObj, dicomTagNumber));
                 returnMap[dicomTagNumber] = returnValues;
             }
+            return returnValues;
         }
 
         public static String extractValue(DCXOBJ currObj, int dicomTagNumber)
@@ -108,13 +109,16 @@ namespace PacsParser
 
         void OnQueryResponseRecieved(DCXOBJ queryResult)
         {
-
-            numResults++;
-            publisher.RaiseEvent(numResults);
+            
+            // raise event for window
             try
             {
-                storeSingleResult(queryResult);
+                List<string> ret = storeSingleResult(queryResult);
+                numResults++;
+                logOutput(ret[0]);
+                //RaiseEvent(numResults, ret);
             }
+            
 
             catch (Exception)
             { errorMessage("La ricerca non ha prodotto risultati."); }

@@ -54,6 +54,9 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ClearCanvas.Dicom">
+      <HintPath>Libraries\ClearCanvas.Dicom.dll</HintPath>
+    </Reference>
     <Reference Include="Dicom.Core">
       <HintPath>Libraries\Dicom.Core.dll</HintPath>
     </Reference>
@@ -72,6 +75,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="User.cs" />
     <Compile Include="FindSCU.cs" />
     <Compile Include="SearchPage.xaml.cs">
       <DependentUpon>SearchPage.xaml</DependentUpon>

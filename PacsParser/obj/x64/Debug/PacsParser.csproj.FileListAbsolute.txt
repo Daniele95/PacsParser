@@ -18,3 +18,4 @@ C:\Users\daniele\Documents\Visual Studio 2017\Projects\PacsParser\PacsParser\obj
 C:\Users\daniele\Documents\Visual Studio 2017\Projects\PacsParser\PacsParser\obj\x64\Debug\PacsParser_MarkupCompile.lref
 C:\Users\daniele\Documents\Visual Studio 2017\Projects\PacsParser\PacsParser\obj\x64\Debug\SearchPage.g.cs
 C:\Users\daniele\Documents\Visual Studio 2017\Projects\PacsParser\PacsParser\obj\x64\Debug\SearchPage.baml
+C:\Users\daniele\Documents\Visual Studio 2017\Projects\PacsParser\PacsParser\bin\x64\Debug\ClearCanvas.Dicom.dll

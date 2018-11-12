@@ -7,12 +7,6 @@
         mc:Ignorable="d"
         Title="Greetings" Height="450" Width="800">
     <Grid>
-        <TextBlock x:Name="textBlock" HorizontalAlignment="Left" 
-                   Margin="210,94,0,0" TextWrapping="Wrap" VerticalAlignment="Top" 
-                   Height="27" Width="57"><Run Text="Query"/><LineBreak/><Run/></TextBlock>
-        <ListBox x:Name="listBox" HorizontalAlignment="Left" 
-                 Height="100" Margin="148,239,0,0" VerticalAlignment="Top" 
-                 Width="100" SelectionChanged="listBox_SelectionChanged"/>
         <TextBlock x:Name="resultsBox" HorizontalAlignment="Left" 
                    Margin="360,277,0,0" TextWrapping="Wrap" Text="risultati" 
                    VerticalAlignment="Top"/>

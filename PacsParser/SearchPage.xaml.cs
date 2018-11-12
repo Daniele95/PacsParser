@@ -1,4 +1,7 @@
-﻿using System;
+﻿using rzdcxLib;
+using System;
+using System.Collections.Generic;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using static PacsParser.Utilities;
@@ -7,40 +10,30 @@ namespace PacsParser
 {
     public partial class SearchPage : Window, Listener
     {
-        Query query;
 
+   
         public SearchPage()
         {
             InitializeComponent();
-            query = new Query();
-
-            // subscribe to find event
-            Subscribe(query.myFind.publisher);
+            Startup publisher = new Startup();
+            Subscribe(publisher);
+            publisher.find();
         }
 
         public void Subscribe(Publisher publisher)
         {
-            Publisher.Event += HeardEvent;
+            publisher.Event += HeardEvent;
         }
-        public TextBlock infoBox;
 
-
-        void HeardEvent(object sender, RaiseArgs e)
-        {
-            infoBox.Text = e.Message;
-        }
 
 
         private void textBox_TextChanged_1(object sender, TextChangedEventArgs e)
         {
-            infoBox = processBox;
-
+            /*
             string wildCard = campoTesto.Text + "*";
-
-            resultsBox.Text = toString(query.findMatchingNames(wildCard));
-
-            
+            query.findMatchingNames(wildCard);*/
         }
+
 
 
         private void listBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -48,5 +41,9 @@ namespace PacsParser
 
         }
 
+        public void HeardEvent(object sender, string s)
+        {
+            resultsBox.Text += s;
+        }
     }
 }

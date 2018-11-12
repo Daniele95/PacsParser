@@ -4,7 +4,7 @@ using static PacsParser.Utilities;
 
 namespace PacsParser
 {
-    abstract class SCU
+    abstract class SCU : Publisher
     {
         public DCXREQ req = new DCXREQ() { AssociationRequestTimeout = 1 };
         public Dictionary<int, string> searchMap;

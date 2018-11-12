@@ -2,41 +2,32 @@
 using System;
 using System.Collections.Generic;
 using System.Windows;
+using static PacsParser.Utilities;
+
 
 namespace PacsParser
 {
-
-    // object with the event
-    public class Publisher
-    {
-        // declare event handler
-        public delegate void EventHandler(Object sender, RaiseArgs e);
-        // declare event
-        public static event EventHandler Event;
-        // raise event, result: "hello"
-        public void RaiseEvent(int a)
-        {
-            RaiseArgs args = new RaiseArgs();
-            args.Message = a.ToString();
-            Event(this, args);
-        }
-    }
-
     // object that listens for the event
     public interface Listener
     {
         // subscribe to event
-         void Subscribe(Publisher publisher);
-            
+        void Subscribe(Publisher publisher);
 
+        void HeardEvent(Object sender, string s);
     }
 
-    // the arguments to use with an event
-    public class RaiseArgs : EventArgs
+    // object with the event
+    public abstract class Publisher
     {
-        public string Message { get; set; }
-    }
+        public delegate void EventHandler(Object publisher, string s);
+        public  event EventHandler Event;
 
+        public void RaiseEvent(object sender, string s)
+        {
+            Event(this, s);
+        }
+    }
+    
     public class Utilities
     {
 
