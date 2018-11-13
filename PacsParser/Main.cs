@@ -7,11 +7,10 @@ using System.Windows.Threading;
 namespace PacsParser
 {
 
-    class Startup : User
+    class Startup 
     {
         public void ThreadProc()
         {
-
             SearchPage mainWindow = new SearchPage();
             mainWindow.Show();
             Dispatcher.Run();
@@ -25,13 +24,9 @@ namespace PacsParser
         }
         
         public static void Main()
-            {
-                Startup a = new Startup();
-
-                a.init();
+        {
+            Startup a = new Startup();
+            a.init();
         }
-
-        }
-
-
     }
+}

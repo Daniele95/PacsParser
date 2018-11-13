@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <data-set xfer="1.2.840.10008.1.2.1" name="Little Endian Explicit">
-<element tag="0008,0052" vr="CS" vm="1" len="8" name="QueryRetrieveLevel">PATIENT</element>
+<element tag="0008,0052" vr="CS" vm="1" len="6" name="QueryRetrieveLevel">STUDY</element>
 <element tag="0008,0054" vr="AE" vm="1" len="10" name="RetrieveAETitle">MIOSERVER</element>
-<element tag="0010,0010" vr="PN" vm="1" len="10" name="PatientName">Doe^Pierre</element>
 <element tag="0010,0020" vr="LO" vm="1" len="8" name="PatientID">54879843</element>
+<element tag="0020,000d" vr="UI" vm="1" len="62" name="StudyInstanceUID">1.3.6.1.4.1.5962.99.1.2786334768.1849416866.1385765836848.3.0</element>
 <element tag="0088,0130" vr="SH" vm="0" len="0" name="StorageMediaFileSetID"></element>
 <element tag="0088,0140" vr="UI" vm="1" len="44" name="StorageMediaFileSetUID">2.25.276814439200867369082595695674465808491</element>
 </data-set>

@@ -14,18 +14,10 @@ namespace PacsParser
 {
     class User : Publisher
     {
-
-
         public void find()
         {
 
-            FileSystemWatcher watcher = new FileSystemWatcher();
-            watcher.Path= "./Results";
-            watcher.Created += new FileSystemEventHandler(onCreated);
-            watcher.NotifyFilter = NotifyFilters.LastAccess | NotifyFilters.LastWrite
-               | NotifyFilters.FileName | NotifyFilters.DirectoryName;
-            watcher.EnableRaisingEvents = true;
-
+            // query optionts
             string query = "";
             query = " -k PatientName=\"Doe*\" " + query;
             query = " -k PatientID " + query;
@@ -37,25 +29,24 @@ namespace PacsParser
             initProcess("findscu",fullQuery);
 
         }
-        [STAThread]
-        private void onCreated(object sender, FileSystemEventArgs e)
+
+
+        public void findStudyByPatientID(string patientID)
         {
-            Dictionary<string, string> results = new Dictionary<string, string>();
-            Thread.Sleep(100);
+            // query optionts
+            string query = "";
+            query = " -k PatientID=\""+ patientID+"\"" + query;
+            query = " -k QueryRetrieveLevel=\"STUDY\" " + query;
+            query = " -k StudyInstanceUID" + query;
 
-            XmlDocument doc = new XmlDocument();
-            doc.Load(e.FullPath);
+            string fullQuery =
+                 " -P  -aec MIOSERVER " + query + " localhost 11112  -od ./Results -v --extract-xml ";
 
-            XmlNodeList xnList = doc.SelectNodes("/data-set/element[@name='PatientName']");
-            string patientName = xnList[0].InnerText;
-             xnList = doc.SelectNodes("/data-set/element[@name='PatientID']");
-            string patientID=  xnList[0].InnerText;
+            // launch query
+            initProcess("findscu", fullQuery);
 
-            results.Add("patientName", patientID);
-            results.Add("patientID", patientID);
-            RaiseEvent(this, results);
         }
-
+        
         public void initProcess(string fileName, string arguments)
         {
             var proc = new Process
@@ -71,32 +62,15 @@ namespace PacsParser
                 }
             };
             DirectoryInfo di = Directory.CreateDirectory("Results");
-
-
             foreach (FileInfo file in di.GetFiles())
-            {
                 file.Delete();
-            }
 
             proc.Start();
-            
+
             while (!proc.StandardOutput.EndOfStream)
             {
                 string line = proc.StandardOutput.ReadLine();
                 Console.WriteLine(line);
-
-                Dictionary<string, string> results = new Dictionary<string, string>();
-                if (line.Contains("PATIENT"))
-                    while (!line.Contains("PatientID"))
-                    {
-                        line = proc.StandardOutput.ReadLine();
-                        if (line.Contains("PatientName"))
-                            results.Add("PatientName", line);
-                    }
-                if (line.Contains("PatientID"))
-                    results.Add("PatientID", line);
-               // if (results["PatientName"] == null) Console.WriteLine("ciao");
-                RaiseEvent(this, results);
             }
         }
 
