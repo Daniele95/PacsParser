@@ -1,6 +1,7 @@
 ﻿using rzdcxLib;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
@@ -10,14 +11,14 @@ namespace PacsParser
 {
     public partial class SearchPage : Window, Listener
     {
+        Startup publisher;
 
-   
         public SearchPage()
         {
             InitializeComponent();
-            Startup publisher = new Startup();
+            publisher = new Startup();
             Subscribe(publisher);
-            publisher.find();
+            
         }
 
         public void Subscribe(Publisher publisher)
@@ -41,9 +42,32 @@ namespace PacsParser
 
         }
 
-        public void HeardEvent(object sender, string s)
+        public void HeardEvent(object sender, Dictionary<string, string> s)
         {
-            resultsBox.Text += s;
+            // Create a button.
+            Button button = new Button();
+            // Set properties.
+           // button.Content = s["PatientName"]; 
+            button.Click += myButton_Click;
+
+            // Add created button to a previously created container.
+            myStackPanel.Children.Add(button);
+        }
+
+        void myButton_Click(object sender, RoutedEventArgs e)
+        {
+            Button button = (Button)sender;
+            button.Content = "asd";
+        }
+
+        private void button_Click(object sender, RoutedEventArgs e)
+        {
+            publisher.find();
+        }
+
+        private void listBox_SelectionChanged_1(object sender, SelectionChangedEventArgs e)
+        {
+
         }
     }
 }

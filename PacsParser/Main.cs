@@ -9,10 +9,6 @@ namespace PacsParser
 
     class Startup : User
     {
-        public override void HeardEvent(object sender, string s)
-        {
-
-        }
         public void ThreadProc()
         {
 

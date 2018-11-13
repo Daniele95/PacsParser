@@ -13,16 +13,16 @@ namespace PacsParser
         // subscribe to event
         void Subscribe(Publisher publisher);
 
-        void HeardEvent(Object sender, string s);
+        void HeardEvent(Object sender, Dictionary<string, string> s);
     }
 
     // object with the event
     public abstract class Publisher
     {
-        public delegate void EventHandler(Object publisher, string s);
+        public delegate void EventHandler(Object publisher, Dictionary<string, string> s);
         public  event EventHandler Event;
 
-        public void RaiseEvent(object sender, string s)
+        public void RaiseEvent(object sender, Dictionary<string, string> s)
         {
             Event(this, s);
         }
